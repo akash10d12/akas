@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emil Fashion Checkout</title>
+    
+    <style>
+        :root { --primary: #c9343d; --dark: #3a0e28; --light: #fff0f0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f8f9fa; padding: 50px 20px; }
+        .container { width: 100%; max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: var(--dark); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--light); padding-bottom: 10px; }
+        h3 { color: var(--primary); margin-top: 25px; margin-bottom: 15px; }
+        .checkout-form label { display: block; margin-bottom: 8px; color: var(--dark); font-weight: 500; }
+        .checkout-form input[type="text"], .checkout-form textarea, .checkout-form select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; }
+        .btn { display: block; width: 100%; padding: 15px; background: var(--primary); color: white; border: none; font-size: 1.1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .btn:hover { background: #ad2e35; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; } /* Disabled state style */
+
+        /* Order Summary Table Styles */
+        .order-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .order-table th, .order-table td { padding: 12px 8px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.95rem; vertical-align: middle; }
+        .order-table th { background-color: var(--light); color: var(--dark); }
+        .product-item-details { display: flex; align-items: center; }
+        .product-item-details img { width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px; border: 1px solid #ddd; }
+        .product-name-qty { display: flex; flex-direction: column; }
+        .product-name-qty span { font-weight: 500; font-size: 0.95rem; }
+        .product-name-qty small { color: #555; font-size: 0.8rem; }
+
+        .total-summary { margin-top: 20px; border-top: 2px solid var(--light); padding-top: 15px; }
+        .total-summary p { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1rem; }
+        .total-summary p strong { color: var(--dark); font-size: 1.2rem; }
+        .size-select { padding: 8px; border-radius: 4px; min-width: 120px; }
+        .warning-msg { color: #c9343d; text-align: center; font-weight: bold; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>🛍️ Emil Fashion Checkout</h2>
+        
+        <form 
+            class="checkout-form" 
+            action="https://formspree.io/f/mkgloeyj" 
+            method="POST"
+        >
+            
+            <h3>1. Delivery Address</h3>
+            <label for="name">Full Name (Puro Naam):</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="phone">Phone Number (Phone Number):</label>
+            <input type="text" id="phone" name="phone" required>
+
+            <label for="address">Delivery Address (Delivery Thikana):</label>
+            <textarea id="address" name="address" rows="4" required></textarea>
+
+            <h3>1.5. Delivery Location (Shipping Charge)</h3>
+            <label for="city">Select Your City Area:</label>
+            <select id="city" name="Delivery Location" onchange="loadAndRenderOrder()" required>
+                <option value="" disabled selected>Select Area</option>
+                <option value="Dhaka">Dhaka City (৳ 80)</option>
+                <option value="Outside Dhaka">Outside Dhaka (৳ 150)</option>
+            </select>
+
+
+            <h3>2. Order Details (Size & Quantity)</h3>
+            
+            <div id="order-summary-content">
+                <p class="warning-msg">Please add items to your cart from the main page first.</p>
+            </div>
+
+            <input type="hidden" name="Order Details" id="order-details-input">
+
+            <h3>3. Payment Method</h3>
+            <div style="padding: 15px; border: 1px dashed #ccc; border-radius: 5px;">
+                <input type="radio" id="cod" name="Payment Method" value="Cash On Delivery" checked disabled>
+                <label for="cod">Cash On Delivery (COD) - **Selected Automatically**</label>
+            </div>
+            
+            <input type="hidden" name="_next" value="thank_you.html" />
+            
+            <button type="submit" class="btn">Confirm Order</button>
+        </form>
+    </div>
+
+    <script>
+        // --- 1. SIZE DEFINITIONS ---
+        const SHOE_SIZES = ['US 5 / EU 35', 'US 6 / EU 36', 'US 7 / EU 37', 'US 8 / EU 38', 'US 9 / EU 39', 'US 10 / EU 40'];
+        const ATTIRE_SIZES = ['50', '52', '54', '56']; 
+
+        // --- 2. GLOBAL VARIABLES & RATES ---
+        const DHAKA_RATE = 80;
+        const OUTSIDE_DHAKA_RATE = 150;
+        let cartData = [];
+        let currentShippingCharge = 0;
+        let grandTotalValue = 0; 
+                
+        // --- 3. HELPER FUNCTION: CREATE SIZE DROPDOWN ---
+        function createSizeDropdown(item) { 
+            let sizes;
+            
+            if (item.type === 'attire') {
+                sizes = ATTIRE_SIZES; // 50, 52, 54, 56
+            } else { 
+                sizes = SHOE_SIZES; // US/EU sizes 
+            }
+
+            let options = sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+            
+            return `
+                <select name="Size_for_Item_${item.id}" class="size-select" required>
+                    <option value="" disabled selected>Select Size</option>
+                    ${options}
+                </select>
+            `;
+        }
+
+        // --- ITEM REMOVE FUNCTION ---
+        function removeItem(itemId) {
+            // Filter cart data to remove the item
+            cartData = cartData.filter(item => item.id !== itemId);
+            
+            // Update localStorage
+            localStorage.setItem('shoppingCart', JSON.stringify(cartData));
+            
+            // Re-render the order table and totals
+            loadAndRenderOrder(); 
+        }
+
+
+        // --- 4. MAIN FUNCTION: LOAD AND RENDER ORDER ---
+        function loadAndRenderOrder() {
+            const storedCart = localStorage.getItem('shoppingCart');
+            const summaryContent = document.getElementById('order-summary-content');
+            const confirmButton = document.querySelector('.btn');
+
+            // CHECK IF CART IS EMPTY
+            if (!storedCart || storedCart === '[]' || JSON.parse(storedCart).length === 0) {
+                summaryContent.innerHTML = 
+                    '<p class="warning-msg">❌ Cart Data Khali! Please, homepage-e giye kicchhu item add korun.</p>';
+                confirmButton.disabled = true; 
+                document.getElementById('order-details-input').value = 'Empty Cart';
+                return;
+            }
+
+            cartData = JSON.parse(storedCart);
+            confirmButton.disabled = false; 
+            let subtotal = 0;
+            
+            // --- Determine Shipping Charge ---
+            const citySelector = document.getElementById('city');
+            const selectedCity = citySelector ? citySelector.value : '';
+
+            if (selectedCity === 'Dhaka') {
+                currentShippingCharge = DHAKA_RATE;
+            } else if (selectedCity === 'Outside Dhaka') {
+                currentShippingCharge = OUTSIDE_DHAKA_RATE;
+            } else {
+                currentShippingCharge = 0;
+            }
+            
+            // --- Build Table HTML (Order Details) ---
+            let tableHTML = `
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>Product Details</th>
+                            <th>Size Select</th>
+                            <th>Price</th>
+                            <th style="width: 50px;">Remove</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            cartData.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                tableHTML += `
+                    <tr>
+                        <td>
+                            <div class="product-item-details">
+                                <img src="${item.image}" alt="${item.name}">
+                                <div class="product-name-qty">
+                                    <span>${item.name}</span>
+                                    <small>Quantity: ${item.quantity}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            ${createSizeDropdown(item)} 
+                        </td>
+                        <td>
+                            <strong style="color: var(--dark);">৳ ${itemTotal.toLocaleString('en-IN')}</strong>
+                            <small style="display: block; color: #888;">(${item.quantity} x ৳ ${item.price.toLocaleString('en-IN')})</small>
+                        </td>
+                        <td>
+                            <button type="button" onclick="removeItem(${item.id})" style="background: var(--primary); color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer;">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `</tbody></table>`;
+            
+            // Grand Total Calculation
+            const grandTotal = subtotal + currentShippingCharge;
+            grandTotalValue = grandTotal; 
+
+            // Total Summary Section
+            tableHTML += `
+                <div class="total-summary">
+                    <p>Subtotal (Mot Product Mullo): <span>৳ ${subtotal.toLocaleString('en-IN')}</span></p>
+                    <p>Shipping Charge (${selectedCity || 'Select Location'}): <span id="shipping-fee">৳ ${currentShippingCharge.toLocaleString('en-IN')}</span></p>
+                    <p>Grand Total (Shob Niye Mullo): <strong>৳ ${grandTotal.toLocaleString('en-IN')}</strong></p>
+                </div>
+            `;
+
+            summaryContent.innerHTML = tableHTML;
+            
+            updateHiddenOrderDetails();
+        }
+
+        // --- 5. FUNCTION: UPDATE HIDDEN ORDER DETAILS FOR FORMSPREE ---
+        function updateHiddenOrderDetails() {
+            const sizeSelectors = document.querySelectorAll('.size-select');
+            const citySelector = document.getElementById('city');
+            const selectedLocation = citySelector ? citySelector.value : 'Location Not Selected';
+
+            let orderSummaryText = `Delivery Location: ${selectedLocation} | Shipping Fee: ৳ ${currentShippingCharge} | Order Items: `;
+
+            cartData.forEach((item, index) => {
+                const selectedSize = sizeSelectors[index] ? sizeSelectors[index].value : 'Size Not Selected'; 
+                orderSummaryText += 
+                    `${item.name} (Qty: ${item.quantity}, Size: ${selectedSize}, Type: ${item.type}, ID: ${item.id}) | `;
+            });
+            
+            orderSummaryText += `GRAND TOTAL: ৳ ${grandTotalValue.toLocaleString('en-IN')}`;
+
+            document.getElementById('order-details-input').value = orderSummaryText;
+        }
+
+        // --- 6. EVENT LISTENERS ---
+        // Form Submission Validation
+        document.querySelector('.checkout-form').addEventListener('submit', function(e) {
+            const sizeSelectors = document.querySelectorAll('.size-select');
+            const citySelector = document.getElementById('city');
+            
+            let allFieldsSelected = true;
+
+            // Ensure cart is not empty upon final submission attempt
+            if (cartData.length === 0) {
+                 alert('❌ Your cart is empty. Please add items before placing an order.');
+                 e.preventDefault();
+                 return;
+            }
+
+            if (citySelector.value === "") {
+                citySelector.style.border = '2px solid red';
+                allFieldsSelected = false;
+            } else {
+                citySelector.style.border = '1px solid #ccc';
+            }
+
+            sizeSelectors.forEach(select => {
+                if (select.value === "") {
+                    allFieldsSelected = false;
+                    select.style.border = '2px solid red';
+                } else {
+                    select.style.border = '1px solid #ccc';
+                }
+            });
+
+            if (!allFieldsSelected) {
+                alert('⚠️ Please select your Delivery Area and Size for all items before placing the order.');
+                e.preventDefault(); 
+                return;
+            }
+
+            // Final update before submission
+            updateHiddenOrderDetails();
+        });
+
+        // Load Order on Page Load
+        document.addEventListener('DOMContentLoaded', loadAndRenderOrder);
+
+        // Location change hook to reload order summary
+        document.getElementById('city').addEventListener('change', loadAndRenderOrder);
+
+        // Size selection change event (to update hidden field for form submission)
+        document.querySelector('.checkout-form').addEventListener('change', function(e) {
+            if (e.target.classList.contains('size-select') || e.target.id === 'city') {
+                updateHiddenOrderDetails();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Borka Collection | Emil Fashion</title>
+    
+    <link rel="stylesheet" href="style.css" /> 
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Roboto&display=swap');
+
+        /* 🚨 Note: Primary color changed to a deeper shade for an attire feel */
+        :root {
+            --primary: #5c3b6d; /* Deep Purple */
+            --secondary: #7c576b; 
+            --dark: #000000;
+            --light: #fff0f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: #fff;
+        }
+
+        /* --- HEADER/NAV STYLE (Same as Shoes) --- */
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 25px;
+            /* Header background matching the new primary color */
+            background: linear-gradient(to right, var(--primary), var(--secondary)); 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: white; /* Changed color for better contrast */
+        }
+
+        .menu-icon {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-icon .bar {
+            width: 25px;
+            height: 3px;
+            background-color: white; /* Changed color for better contrast */
+            border-radius: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            background-color: var(--dark);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: 0.3s;
+            border: 0.5px solid #444;
+        }
+
+        .nav-links a:hover {
+            background-color: black;
+            color: #fff;
+            border-color: black;
+        }
+
+        /* --- PRODUCT GRID STYLE (Same as Shoes, but using attire primary color) --- */
+        .page-title {
+            text-align: center;
+            padding: 30px 20px 10px;
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            font-size: 2.2rem;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: #ffffff;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .product-card h4 {
+            font-size: 1.1rem;
+            margin: 15px 10px 5px;
+            color: var(--dark);
+        }
+
+        .product-card p {
+            color: var(--primary);
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .product-card button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 90%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+
+        .product-card button:hover {
+            background: #462c54; /* Darker Purple */
+        }
+
+        /* MOBILE RESPONSIVE */
+        @media (max-width: 768px) {
+            .menu-icon { display: flex; }
+            .nav-links {
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background-color: var(--light);
+                display: none;
+                padding: 10px 0;
+                box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            }
+            .nav-links a {
+                background-color: transparent;
+                color: var(--dark);
+                font-size: 18px;
+                padding: 12px 0;
+                border-bottom: 1px solid #eee;
+                width: 100%;
+                text-align: center;
+            }
+            .nav-links.show { display: flex; }
+            .product-grid { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="nav-header">
+        <div class="brand">EMIL FASHION</div>
+        
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <nav class="nav-links" id="navMenu">
+            <a href="index.html">🏠 Home</a>
+            <a href="checkout.html">🛒 Checkout</a>
+        </nav>
+    </header>
+
+    <h1 class="page-title">✨ Elegant Borka Collection</h1>
+
+    <section class="product-grid">
+        <div class="product-card">
+            <img src="images/BORKA1.jpg" alt="Premium Black Borka">
+            <h4>Premium Black Borka (Simple)</h4>
+            <p>৳ 4500</p>
+            <button onclick="addToCart('Premium Black Borka (Simple)', 4500, 'images/BORKA1.jpg', 'attire')">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="images/BORKA2.jpg" alt="Stylish Embroidery Abaya">
+            <h4>Stylish Embroidery Abaya</h4>
+            <p>৳ 5800</p>
+            <button onclick="addToCart('Stylish Embroidery Abaya', 5800, 'images/BORKA2.jpg', 'attire')">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="images/BORKA3.jpg" alt="Formal Navy Borka">
+            <h4>Formal Navy Borka (Buttons)</h4>
+            <p>৳ 3900</p>
+            <button onclick="addToCart('Formal Navy Borka (Buttons)', 3900, 'images/BORKA3.jpg', 'attire')">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="images/BORKA4.jpg" alt="Everyday Hijab Set">
+            <h4>Everyday Hijab Set</h4>
+            <p>৳ 2500</p>
+            <button onclick="addToCart('Everyday Hijab Set', 2500, 'images/BORKA4.jpg', 'attire')">Add to Cart</button>
+        </div>
+    </section>
+
+    <script>
+        // --- Navigation Toggle ---
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            navMenu.classList.toggle('show');
+        }
+
+        // --- Cart Logic (Needs full cart system from index.html) ---
+        let cart = [];
+        let nextItemId = 1;
+
+        // Initialize cart from localStorage
+        const savedCart = localStorage.getItem('shoppingCart');
+        if (savedCart) {
+            cart = JSON.parse(savedCart);
+            if (cart.length > 0) {
+                const maxId = cart.reduce((max, item) => Math.max(max, item.id || 0), 0);
+                nextItemId = maxId + 1;
+            }
+        }
+        
+        // This function must match the index.html script exactly
+        function addToCart(productName, price, imageUrl, productType) { 
+            cart.push({
+                id: nextItemId++, 
+                name: productName,
+                price: price,
+                image: imageUrl,
+                quantity: 1, 
+                type: productType // <-- Saving 'attire' type
+            });
+            
+            localStorage.setItem('shoppingCart', JSON.stringify(cart));
+            alert(`${productName} added to cart! Total items: ${cart.length}`);
+            // console.log(cart); // For debugging
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+
+
+
+<head>
+
+
+
+    <meta charset="UTF-8">
+
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+    <title>Emil Fashion | Women's Ethnic & Modern Wear</title>
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
+   
+
+
+
+    <style>
+
+
+
+        :root { --primary: #c9343d; --dark: #3a0e28; --light: #fff0f0; }
+
+
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+
+
+        body { background-color: #f8f9fa; }
+
+
+
+        nav { background: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+
+
+
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--dark); }
+
+
+
+        .logo span { color: var(--primary); }
+
+
+
+        .nav-links { display: flex; gap: 20px; }
+
+
+
+        .nav-links a { text-decoration: none; color: var(--dark); font-weight: 500; transition: 0.3s; }
+
+
+
+        .nav-links a:hover { color: var(--primary); }
+
+
+
+        .icons { display: flex; gap: 15px; }
+
+
+
+        .icons i { font-size: 1.2rem; color: var(--dark); cursor: pointer; }
+
+
+
+
+
+
+
+        .cart-icon-container { position: relative; display: inline-block; cursor: pointer; }
+
+
+
+        #cart-count { background: var(--primary); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; position: absolute; top: -10px; right: -10px; line-height: 1; min-width: 18px; text-align: center; }
+
+
+
+       
+
+
+
+        .btn { padding: 12px 30px; background: var(--primary); color: white; border: none; font-size: 1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+
+
+
+        .btn:hover { background: #ad2e35; }
+
+
+
+        .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.3s; }
+
+
+
+        .product-card:hover { transform: translateY(-5px); }
+
+
+
+        .product-img { width: 100%; height: 250px; object-fit: cover; }
+
+
+
+        .product-info { padding: 1.5rem; }
+
+
+
+        .price { color: var(--primary); font-size: 1.2rem; font-weight: bold; margin: 10px 0; display: block; }
+
+
+
+
+
+
+
+        /* CART MODAL/SIDEBAR STYLES */
+
+
+
+        .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 2000; display: none; }
+
+
+
+        .cart-sidebar { position: absolute; top: 0; right: 0; width: 350px; height: 100%; background: white; padding: 20px; box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3); transform: translateX(100%); transition: transform 0.3s ease-in-out; display: flex; flex-direction: column; }
+
+
+
+        .cart-overlay.open { display: block; }
+
+
+
+        .cart-overlay.open .cart-sidebar { transform: translateX(0); }
+
+
+
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--light); padding-bottom: 15px; margin-bottom: 15px; }
+
+
+
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--primary); }
+
+
+
+        #cart-items-list { list-style: none; padding: 0; flex-grow: 1; max-height: 70vh; overflow-y: auto; }
+
+
+
+        .cart-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed #eee; font-size: 0.95rem; }
+
+
+
+        .cart-total-section { padding-top: 15px; border-top: 2px solid var(--light); }
+
+
+
+        .cart-total { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; color: var(--dark); }
+
+
+
+       
+
+
+
+        /* Hero and general section styles */
+
+
+
+        /* 🚨 UPDATED HERO CSS for HTML img tag */
+
+
+
+        .hero {
+
+
+
+            position: relative;
+
+
+
+            height: 80vh;
+
+
+
+            display: flex;
+
+
+
+            align-items: center;
+
+
+
+            justify-content: center;
+
+
+
+            text-align: center;
+
+
+
+            color: white;
+
+
+
+            overflow: hidden;
+
+
+
+            background: none; /* Old background removed */
+
+
+
+        }
+
+
+
+        .hero-bg-image {
+
+
+
+            position: absolute;
+
+
+
+            top: 0;
+
+
+
+            left: 0;
+
+
+
+            width: 100%;
+
+
+
+            height: 100%;
+
+
+
+            object-fit: cover;
+
+
+
+            z-index: -1;
+
+
+
+            filter: brightness(60%); /* Text reading easier */
+
+
+
+        }
+
+
+
+        .hero-content {
+
+
+
+            position: relative;
+
+
+
+            z-index: 1;
+
+
+
+            padding: 20px;
+
+
+
+        }
+
+
+
+       
+
+
+
+        .section-title { text-align: center; margin: 3rem 0 2rem; color: var(--dark); }
+
+
+
+        .product-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding: 0 5%; margin-bottom: 3rem; }
+
+
+
+        footer { background: var(--dark); color: white; text-align: center; padding: 2rem; margin-top: 2rem; }
+
+
+
+    </style>
+
+
+
+</head>
+
+
+
+<body>
+
+
+
+
+
+
+
+    <nav>
+
+
+
+        <div class="logo">Emil<span>Fashion</span></div>
+
+
+
+        <div class="nav-links">
+
+
+
+           <li><a href="shoes.html" target="_blank">shoes</a></li> <br>
+
+
+           <li><a href="borka.html" target="_blank">borka</a></li>
+
+
+
+
+            
+
+
+
+            
+
+
+
+        </div>
+
+
+
+        <div class="icons">
+
+
+
+            <a href="login.html"><i class="fas fa-user"></i></a>
+
+
+
+            <div class="cart-icon-container">
+
+
+
+                <i class="fas fa-shopping-cart" onclick="viewCart()"></i>
+
+
+
+                <span id="cart-count">0</span>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </nav>
+
+
+
+
+
+
+
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart(event)">
+
+
+
+        <div class="cart-sidebar" id="cartSidebar" onclick="event.stopPropagation();">
+
+
+
+            <div class="cart-header">
+
+
+
+                <h3>🛒 My Shopping Cart</h3>
+
+
+
+                <button class="close-btn">&times;</button>
+
+
+
+            </div>
+
+
+
+           
+
+
+
+            <ul id="cart-items-list">
+
+
+
+                </ul>
+
+
+
+
+
+
+
+            <div class="cart-total-section">
+
+
+
+                <div class="cart-total">
+
+
+
+                    <span>Subtotal:</span>
+
+
+
+                    <span id="cart-subtotal">৳ 0</span>
+
+
+
+                </div>
+
+
+
+                <button onclick="proceedToCheckout()" class="btn" style="text-align: center;">Proceed to Checkout</button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+   
+
+
+
+    <section class="hero">
+
+
+
+        <img src="images/AKASH12.jpg" alt="Fashion Trends Background" class="hero-bg-image">
+
+
+
+        <div class="hero-content">
+
+
+
+            <h1>Elegance in Every Thread</h1>
+
+
+
+            <p>Discover the latest trends in women's fashion.</p>
+
+
+
+            <br>
+
+
+
+            <button class="btn" onclick="scrollToProducts()">Shop Now</button>
+
+
+
+        </div>
+
+
+
+    </section>
+
+
+
+
+
+
+
+    <h2 class="section-title">Step Up Your Style: Trending Footwear</h2>
+
+
+
+   
+
+
+
+    <div class="product-container" id="products">
+
+
+
+       
+
+
+
+        <div class="product-card">
+
+
+
+           <img src="images/AKASH7.jpg" class="product-img" alt="Stylish Sneakers">
+
+
+
+            <div class="product-info">
+
+
+
+                <h3>Women's Casual Sneakers</h3>
+
+
+
+                <span class="price">৳ 2,999</span>
+
+
+
+                <button class="btn"
+
+
+
+                        onclick="addToCart('Women\'s Casual Sneakers', 2999, 'images/AKASH7.jpg')">
+
+
+
+                    Add to Cart
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="product-card">
+
+
+
+            <img src="images/AKASH6.jpg" class="product-img" alt="Elegant Heels">
+
+
+
+            <div class="product-info">
+
+
+
+                <h3>Elegant High Heels</h3>
+
+
+
+                <span class="price">৳ 3,800</span>
+
+
+
+                <button class="btn"
+
+
+
+                        onclick="addToCart('Elegant High Heels', 3800, 'images/AKASH6.jpg')">
+
+
+
+                    Add to Cart
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="product-card">
+
+
+
+           <img src="images/AKASH2.jpg" class="product-img" alt="Comfy Ballet Flats">
+
+
+
+            <div class="product-info">
+
+
+
+                <h3>Comfy Ballet Flats</h3>
+
+
+
+                <span class="price">৳ 1,599</span>
+
+
+
+                <button class="btn"
+
+
+
+                        onclick="addToCart('Comfy Ballet Flats', 1599, 'images/AKASH2.jpg')">
+
+
+
+                    Add to Cart
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="product-card">
+
+
+
+            <img src="images/AKASH34.jpg" class="product-img" alt="Classic Brown Loafers">
+
+
+
+            <div class="product-info">
+
+
+
+                <h3>Classic Brown Loafers (Brown)</h3>
+
+
+
+                <span class="price">৳ 999</span>
+
+
+
+                <button class="btn"
+
+
+
+                        onclick="addToCart('Classic Brown Loafers (Brown)', 999, 'images/AKASH34.jpg')">
+
+
+
+                    Add to Cart
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="product-card">
+
+
+
+            <img src="images/AKASH.jpg" class="product-img" alt="Another Loafers">
+
+
+
+            <div class="product-info">
+
+
+
+                <h3>Classic Brown Loafers (Black)</h3>
+
+
+
+                <span class="price">৳ 999</span>
+
+
+
+                <button class="btn"
+
+
+
+                        onclick="addToCart('Classic Brown Loafers (Black)', 999, 'images/AKASH.jpg')">
+
+
+
+                    Add to Cart
+
+
+
+                </button>
+
+
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <footer>
+
+
+
+        <p>&copy; 2024 Emil Fashion. All rights reserved.</p>
+
+
+
+    </footer>
+
+
+
+
+
+
+
+   <script>
+
+    let cart = [];
+
+    let nextItemId = 1; // Unique ID tracking
+
+
+
+    // Initial load: Load cart from local storage if available
+
+    const savedCart = localStorage.getItem('shoppingCart');
+
+    if (savedCart) {
+
+        cart = JSON.parse(savedCart);
+
+        // Ensure nextItemId starts after the highest existing ID
+
+        if (cart.length > 0) {
+
+            const maxId = cart.reduce((max, item) => Math.max(max, item.id || 0), 0);
+
+            nextItemId = maxId + 1;
+
+        }
+
+    }
+
+   
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        updateCartCount();
+
+    });
+
+
+
+    function updateCartCount() {
+
+        // Ekhon shudhu unique item count korbe (length of the array)
+
+        const totalCount = cart.length;
+
+        document.getElementById('cart-count').textContent = totalCount;
+
+        // Update Local Storage after every change
+
+        localStorage.setItem('shoppingCart', JSON.stringify(cart));
+
+    }
+
+
+
+    // 🚀 FIX: Ekhon prottek click-e alada unique line item toiri hobe
+
+    function addToCart(productName, price, imageUrl) {
+
+        // 'existingItem' check kora baad dewa holo
+
+        cart.push({
+
+            id: nextItemId++, // Prottek item-er jonno unique ID toiri hochhe
+
+            name: productName,
+
+            price: price,
+
+            image: imageUrl,
+
+            quantity: 1 // Quantity 1 set kora holo
+
+        });
+
+
+
+        updateCartCount();
+
+        viewCart();
+
+    }
+
+
+
+    function updateQuantity(itemId, delta) {
+
+        const itemIndex = cart.findIndex(item => item.id === itemId);
+
+
+
+        if (itemIndex > -1) {
+
+            // Ekhane shudhu item remove korar jonno decrement logic use kora hobe
+
+            if (delta < 0) {
+
+                 cart[itemIndex].quantity += delta;
+
+                 if (cart[itemIndex].quantity <= 0) {
+
+                     // Quantity zero ba tar theke kom hole line item-ta delete kora hobe
+
+                     cart.splice(itemIndex, 1);
+
+                 }
+
+            }
+
+            // Increment logic (plus button) disable kora holo karon prottek notun item-er jonno abar 'Add to Cart' click korte hobe
+
+        }
+
+        updateCartCount();
+
+        viewCart();
+
+    }
+
+   
+
+    function viewCart() {
+
+        const overlay = document.getElementById('cartOverlay');
+
+        const list = document.getElementById('cart-items-list');
+
+        const subtotalElement = document.getElementById('cart-subtotal');
+
+        let total = 0;
+
+        list.innerHTML = '';
+
+
+
+        if (cart.length === 0) {
+
+            list.innerHTML = '<li style="text-align: center; color: var(--dark); padding: 20px;">Apnar Cart Khali.</li>';
+
+            subtotalElement.textContent = '৳ 0';
+
+        } else {
+
+            cart.forEach((item) => {
+
+                const itemTotal = item.price * item.quantity;
+
+                total += itemTotal;
+
+               
+
+                const listItem = document.createElement('li');
+
+                listItem.classList.add('cart-item');
+
+                listItem.style.flexDirection = 'column';
+
+                listItem.style.alignItems = 'flex-start';
+
+
+
+                listItem.innerHTML = `
+
+                    <div style="display: flex; align-items: center; width: 100%; margin-bottom: 10px;">
+
+                        <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px;">
+
+                        <div style="flex-grow: 1;">
+
+                            <span style="font-weight: bold; display: block;">${item.name}</span>
+
+                            <span style="font-size: 0.85rem; color: #777;">Price: ৳ ${item.price.toLocaleString('en-IN')}</span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+
+                        <div style="font-weight: bold; color: var(--primary);">Total: ৳ ${itemTotal.toLocaleString('en-IN')}</div>
+
+                       
+
+                        <div style="display: flex; align-items: center; background: #eee; border-radius: 4px;">
+
+                            <button onclick="updateQuantity(${item.id}, -1)" style="padding: 5px 10px; border: none; background: none; cursor: pointer; font-size: 1rem;">-</button>
+
+                            <span style="padding: 5px 8px; font-weight: bold;">${item.quantity}</span>
+
+                            </div>
+
+                    </div>
+
+                `;
+
+                list.appendChild(listItem);
+
+            });
+
+            subtotalElement.textContent = `৳ ${total.toLocaleString('en-IN')}`;
+
+        }
+
+        overlay.classList.add('open');
+
+    }
+
+
+
+    function closeCart(event) {
+
+         if (event.target.classList.contains('close-btn') || event.target.id === 'cartOverlay') {
+
+             document.getElementById('cartOverlay').classList.remove('open');
+
+         }
+
+    }
+
+
+
+    function scrollToProducts() {
+
+        document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+
+    }
+
+   
+
+    function proceedToCheckout() {
+
+        if (cart.length === 0) {
+
+            alert('Your cart is empty! Please add some items.');
+
+            return;
+
+        }
+
+        localStorage.setItem('shoppingCart', JSON.stringify(cart));
+
+        window.location.href = 'checkout.html';
+
+    }
+
+</script>
+
+</body>
+
+
+
+</html> 

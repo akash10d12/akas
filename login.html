@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login | Emil Fashion</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Styling is consistent with the rest of the site */
+        :root { --primary: #c9343d; --dark: #3a0e28; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .login-container { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 25px rgba(0,0,0,0.15); width: 100%; max-width: 400px; text-align: center; }
+        h2 { color: var(--dark); margin-bottom: 25px; font-size: 1.8rem; }
+        .input-group { position: relative; margin-bottom: 25px; text-align: left; }
+        .input-group input { width: 100%; padding: 12px 15px 12px 40px; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem; outline: none; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--dark); font-size: 1rem; }
+        
+        .btn-login { display: block; width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 5px; font-size: 1.1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; margin-bottom: 10px;}
+        .btn-login:hover { background: #ad2e35; }
+
+        .register-link { margin-top: 20px; font-size: 0.95rem; }
+        .register-link a { color: var(--primary); text-decoration: none; font-weight: bold; }
+        .register-link a:hover { text-decoration: underline; }
+
+        .forgot-password { text-align: right; margin-bottom: 15px; }
+        .forgot-password a { color: #555; text-decoration: none; font-size: 0.9rem; }
+        .forgot-password a:hover { text-decoration: underline; }
+
+        /* --- Social Buttons Styling --- */
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .btn-social i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .google {
+            background-color: #db4437; /* Google Red */
+            color: white;
+            border: 1px solid #c33d31;
+        }
+        .google:hover {
+            background-color: #c0382d;
+        }
+
+        .facebook {
+            background-color: #4267B2; /* Facebook Blue */
+            color: white;
+            border: 1px solid #365899;
+        }
+        .facebook:hover {
+            background-color: #3b5998;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Emil Fashion Login</h2>
+        
+        <form action="index.html" method="GET">
+            
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" placeholder="Email Address" name="email" required>
+            </div>
+
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" placeholder="Password" name="password" required>
+            </div>
+
+            <div class="forgot-password">
+                <a href="#">Forgot Password?</a>
+            </div>
+            
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="separator" style="margin: 25px 0;">
+            <p style="color: #888; font-size: 0.9rem;">— Or login with —</p>
+        </div>
+
+        <a href="#" class="btn-social google">
+            <i class="fab fa-google"></i> Login with Google
+        </a>
+        <a href="#" class="btn-social facebook">
+            <i class="fab fa-facebook-f"></i> Login with Facebook
+        </a>
+
+        <div class="register-link">
+            Don't have an account? <a href="register.html">Register Now</a>
+        </div>
+    </div>
+
+</body>
+</html>
